@@ -1,7 +1,7 @@
 #include <SPI.h>
 #include <Ethernet.h>
 
-int PERIOD = 1000;
+int PERIOD = 4000;  // ms
 int PIN_OUT[] = {3, 5, 6, 9};
 
 int mode[] = {0, 0, 0, 0};
@@ -16,7 +16,7 @@ void setup() {
     pinMode(pin_number, OUTPUT);
   }
 
-  mode = {0, 1, 2, 3};
+  mode = {2, 3, 4, 5};
 }
 
 void loop() {
@@ -54,6 +54,9 @@ bool run_mode(int mode, int led_number, int percent_time_elapsed) {
     case 4:
       blink_fast(led_number, percent_time_elapsed);
       break;
+    case 5:
+      pulse(led_number, percent_time_elapsed);
+      break;
     default:
       led_off(led_number);
   }
@@ -63,15 +66,23 @@ bool run_mode(int mode, int led_number, int percent_time_elapsed) {
 ////// LED DESIGN FUNCTIONS
 bool blink(int led_number, int percent_elapsed) {
   // We toggle on/off every 10% of time elapsed
-  blink_base(led_number, percent_elapsed/10);
+  blink_base(led_number, percent_elapsed/2);
 }
 
 bool blink_fast(int led_number, int percent_elapsed) {
-  blink_base(led_number, percent_elapsed/5);
+  blink_base(led_number, percent_elapsed);
 }
 
 bool blink_slow(int led_number, int percent_elapsed) {
-  blink_base(led_number, percent_elapsed/25);
+  blink_base(led_number, percent_elapsed/5);
+}
+
+bool pulse(int led_number, int percent_elapsed) {
+  // Take the percentage of the sin wave we've completed, scaled up to 10-60%
+  // 3.14 * 2 = 6.28
+  Serial.println("start");
+  Serial.println(percent_elapsed);
+  led_on(led_number, int(((sin(percent_elapsed/100.0 * 6.28) + 1) * 25) + 10));
 }
 
 
@@ -84,8 +95,14 @@ int blink_base(int led_number, int number) {
     led_off(led_number);
   }
 }
+
 int led_on(int led_number) {
-  analogWrite(PIN_OUT[led_number], 255);
+  led_on(led_number, 100);
+}
+
+int led_on(int led_number, int power_percentage) {
+  Serial.println(power_percentage);
+  analogWrite(PIN_OUT[led_number], int(power_percentage * 2.55));
 }
 
 int led_off(int led_number) {
