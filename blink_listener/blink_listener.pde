@@ -1,3 +1,6 @@
+#include <SPI.h>
+#include <Ethernet.h>
+
 int TIMEOUT = 30;
 int PIN_OUT[] = {3, 5, 6, 9};
 int BRIGHTNESS_INCREASE = 5;
