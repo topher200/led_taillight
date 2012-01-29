@@ -17,6 +17,7 @@ void setup() {
   }
 
   mode = {6,6,6,6};
+  // mode = {3,4,5,5};
 }
 
 void loop() {
