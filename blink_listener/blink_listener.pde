@@ -9,7 +9,6 @@ int PIN_OUT[] = {3, 5, 6, 9};
 int mode[] = {0, 0, 0, 0};
 long start_time = 0;
 
-// telnet defaults to port 23
 EthernetServer server = EthernetServer(50001);
 
 
@@ -36,8 +35,21 @@ void loop() {
   // if an incoming client connects, there will be bytes available to read:
   EthernetClient client = server.available();
   if (client == true) {
-    int pin = int(client.read());
-    mode[pin] = int(client.read());
+    int read_pin = int(client.read());
+    Serial.print('pin: ');
+    Serial.println(read_pin);
+    int read_mode = int(client.read());
+    Serial.print('mode: ');
+    Serial.println(read_mode);
+    if (read_pin >= 0) {
+      if (read_pin < 4) {
+        if (read_mode >= 0) {
+          if (read_mode <= 6) {
+            mode[read_pin] = read_mode;
+          }
+        }
+      }
+    }
   }
   
   // We run in cycles, each one PERIOD long. If our current time is greater
