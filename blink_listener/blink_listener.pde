@@ -16,7 +16,7 @@ void setup() {
     pinMode(pin_number, OUTPUT);
   }
 
-  mode = {2, 3, 4, 5};
+  mode = {6,6,6,6};
 }
 
 void loop() {
@@ -57,8 +57,12 @@ bool run_mode(int mode, int led_number, int percent_time_elapsed) {
     case 5:
       pulse(led_number, percent_time_elapsed);
       break;
+    case 6:
+      angry_robot(led_number, percent_time_elapsed);
+      break;
     default:
       led_off(led_number);
+      break;
   }
 }
 
@@ -80,15 +84,31 @@ bool blink_slow(int led_number, int percent_elapsed) {
 bool pulse(int led_number, int percent_elapsed) {
   // Take the percentage of the sin wave we've completed, scaled up to 10-60%
   // 3.14 * 2 = 6.28
-  Serial.println("start");
-  Serial.println(percent_elapsed);
   led_on(led_number, int(((sin(percent_elapsed/100.0 * 6.28) + 1) * 25) + 10));
+}
+
+bool angry_robot(int led_number, int percent_elapsed) {
+  switch (led_number) {
+    case 0:
+      blink_fast(led_number, percent_elapsed);
+      break;
+    case 1:
+      led_on(led_number, 40);
+      break;
+    case 2:
+      blink_fast(led_number, percent_elapsed + 1);
+      break;
+    case 3:
+    default:
+      led_off(led_number);
+      break;
+  }
 }
 
 
 ////// HELPER FUNCTIONS
 
-int blink_base(int led_number, int number) {
+bool blink_base(int led_number, int number) {
   if (even(number)) {
     led_on(led_number);
   } else {
@@ -96,16 +116,15 @@ int blink_base(int led_number, int number) {
   }
 }
 
-int led_on(int led_number) {
+bool led_on(int led_number) {
   led_on(led_number, 100);
 }
 
-int led_on(int led_number, int power_percentage) {
-  Serial.println(power_percentage);
+bool led_on(int led_number, int power_percentage) {
   analogWrite(PIN_OUT[led_number], int(power_percentage * 2.55));
 }
 
-int led_off(int led_number) {
+bool led_off(int led_number) {
   analogWrite(PIN_OUT[led_number], 0);
 }
 
