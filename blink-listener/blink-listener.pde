@@ -8,6 +8,7 @@ void setup() {
   byte mac_address[] = { 0x90, 0xA2, 0xDA, 0x00, 0xCD, 0x38 };  
   Ethernet.begin(mac_address);
 
+  // Send the IP address over USB
   Serial.begin(9600);
   Serial.print('ip_address: ');
   Serial.println(localIP());
