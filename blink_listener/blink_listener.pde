@@ -1,26 +1,45 @@
 #include <SPI.h>
 #include <Ethernet.h>
 
+byte MAC_ADDRESS[] = {0x90, 0xA2, 0xDA, 0x00, 0xCD, 0x38};  
+byte IP[] = {10, 1, 30, 210};
 int PERIOD = 4000;  // ms
 int PIN_OUT[] = {3, 5, 6, 9};
 
 int mode[] = {0, 0, 0, 0};
 long start_time = 0;
 
+// telnet defaults to port 23
+EthernetServer server = EthernetServer(50001);
+
+
 void setup() {
   // Set up serial output
   Serial.begin(9600);
+  
+  // initialize the ethernet device
+  Ethernet.begin(MAC_ADDRESS, IP);
+
+  // start listening for clients
+  server.begin();
 
   // Set each LED pin to output mode
   for (int pin_number = 0; pin_number < 4; pin_number++) {
     pinMode(pin_number, OUTPUT);
   }
 
-  mode = {6,6,6,6};
+  mode = {5,5,5,5};
   // mode = {3,4,5,5};
 }
 
 void loop() {
+  // if an incoming client connects, there will be bytes available to read:
+  EthernetClient client = server.available();
+  if (client == true) {
+    int pin = int(client.read());
+    mode[pin] = int(client.read());
+  }
+  
   // We run in cycles, each one PERIOD long. If our current time is greater
   // than our start time plus our PERIOD, we've gone an entire PERIOD and need
   // to start the loop again.
