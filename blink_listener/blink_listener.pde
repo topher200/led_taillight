@@ -26,30 +26,30 @@ void setup() {
   for (int pin_number = 0; pin_number < 4; pin_number++) {
     pinMode(pin_number, OUTPUT);
   }
-
-  mode = {5,5,5,5};
-  // mode = {3,4,5,5};
 }
 
 void loop() {
   // if an incoming client connects, there will be bytes available to read:
   EthernetClient client = server.available();
   if (client == true) {
-    int read_pin = int(client.read());
-    Serial.print('pin: ');
-    Serial.println(read_pin);
-    int read_mode = int(client.read());
-    Serial.print('mode: ');
-    Serial.println(read_mode);
-    if (read_pin >= 0) {
-      if (read_pin < 4) {
-        if (read_mode >= 0) {
-          if (read_mode <= 6) {
-            mode[read_pin] = read_mode;
+    if (client.available() == 2) {
+      int read_pin = int(client.read());
+      Serial.print("pin: ");
+      Serial.println(read_pin);
+      int read_mode = int(client.read());
+      Serial.print("mode: ");
+      Serial.println(read_mode);
+      if (read_pin >= 0) {
+        if (read_pin < 4) {
+          if (read_mode >= 0) {
+            if (read_mode <= 6) {
+              mode[read_pin] = read_mode;
+            }
           }
         }
       }
     }
+    client.stop();
   }
   
   // We run in cycles, each one PERIOD long. If our current time is greater
