@@ -1,20 +1,25 @@
 #include <SPI.h>
 #include <Ethernet.h>
 
-int TIMEOUT = 30;
+int TIMEOUT = 300;
 int PIN_OUT[] = {3, 5, 6, 9};
 int BRIGHTNESS_INCREASE = 5;
 int pin_brightness[] = {0, 30, 60, 90};
 
-void setup() {
-  // Set up ethernet with DHCP
-  byte mac_address[] = {0x90, 0xA2, 0xDA, 0x00, 0xCD, 0x38};  
-  Ethernet.begin(mac_address);
+byte MAC_ADDRESS[] = {0x90, 0xA2, 0xDA, 0x00, 0xCD, 0x38};  
+byte IP[] = {10, 1, 30, 210};
 
-  // Send the IP address over USB
+EthernetServer server = EthernetServer(50001);
+
+void setup() {
+  // Set up serial output
   Serial.begin(9600);
-  Serial.print('ip_address: ');
-  Serial.println(localIP());
+  Serial.println("attempting to connect to ethernet");
+
+  // Set up ethernet
+  Ethernet.begin(MAC_ADDRESS, IP);
+  Serial.print("connected! ip_address: ");
+  Serial.println(Ethernet.localIP());
   
   // Set each LED pin to output mode
   for (int pin_number = 0; pin_number < 4; pin_number++) {
@@ -23,6 +28,13 @@ void setup() {
 }
 
 void loop() {
+  // Print the message if we have a client
+  EthernetClient client = server.available();
+  if (client) {
+    Serial.print("message: ");
+    Serial.println(client.read());
+  }
+  
   // Run though each output pin
   for (int pin_number = 0; pin_number < 4; pin_number++) {
     // Increase the pin's brightness. If it's over 255, drop it back to zero
@@ -38,3 +50,7 @@ void loop() {
   
   delay(TIMEOUT);                            
 }
+
+void generate_pulse() {
+}
+
