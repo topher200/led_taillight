@@ -31,12 +31,12 @@ void setup() {
 void loop() {
   // if an incoming client connects, there will be bytes available to read:
   EthernetClient client = server.available();
-  if (client == true) {
+  if (client) {
     if (client.available() >= 2) {
-      int read_pin = int(client.read());
+      int read_pin = int(client.read()) - int("0");
       Serial.print("pin: ");
       Serial.println(read_pin);
-      int read_mode = int(client.read());
+      int read_mode = int(client.read()) - int("0");
       Serial.print("mode: ");
       Serial.println(read_mode);
       if (read_pin >= 0) {
