@@ -2,7 +2,7 @@
 #include <Ethernet.h>
 
 byte MAC_ADDRESS[] = {0x90, 0xA2, 0xDA, 0x00, 0xCD, 0x38};  
-byte IP[] = {10, 1, 30, 210};
+byte IP[] = {192, 168, 95, 44};
 int PERIOD = 4000;  // ms
 int PIN_OUT[] = {3, 5, 6, 9};
 
