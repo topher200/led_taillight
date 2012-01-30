@@ -32,7 +32,7 @@ void loop() {
   // if an incoming client connects, there will be bytes available to read:
   EthernetClient client = server.available();
   if (client == true) {
-    if (client.available() == 2) {
+    if (client.available() >= 2) {
       int read_pin = int(client.read());
       Serial.print("pin: ");
       Serial.println(read_pin);
