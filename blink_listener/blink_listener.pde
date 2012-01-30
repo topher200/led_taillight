@@ -33,10 +33,10 @@ void loop() {
   EthernetClient client = server.available();
   if (client) {
     if (client.available() >= 2) {
-      int read_pin = int(client.read()) - int("0");
+      int read_pin = get_single_digit_int(client);
       Serial.print("pin: ");
       Serial.println(read_pin);
-      int read_mode = int(client.read()) - int("0");
+      int read_mode = get_single_digit_int(client);
       Serial.print("mode: ");
       Serial.println(read_mode);
       if (read_pin >= 0) {
@@ -162,4 +162,9 @@ bool led_off(int led_number) {
 
 bool even(int number) {
   return ((number % 2) == 0);
+}
+
+int get_single_digit_int(EthernetClient stream) {
+  // ascii("0") == decimal 48
+  return stream.read() - 48;
 }
