@@ -29,24 +29,17 @@ void setup() {
 }
 
 void loop() {
-  // if an incoming client connects, there will be bytes available to read:
+  // if an incoming client connects, there will be bytes available to read
   EthernetClient client = server.available();
   if (client) {
-    if (client.available() >= 2) {
-      int read_pin = get_single_digit_int(client);
-      Serial.print("pin: ");
-      Serial.println(read_pin);
-      int read_mode = get_single_digit_int(client);
-      Serial.print("mode: ");
-      Serial.println(read_mode);
-      if (read_pin >= 0) {
-        if (read_pin < 4) {
-          if (read_mode >= 0) {
-            if (read_mode <= 6) {
-              mode[read_pin] = read_mode;
-            }
-          }
-        }
+    // Our message is 4 chars long
+    if (client.available() >= 4) {
+      // We found a message! Each char is the new mode for an LED
+      for (int led_number = 0; led_number < 4; led_number++) {
+        int input = get_single_digit_int(client);
+        Serial.print("input int: ");
+        Serial.println(input);
+        mode[led_number] = input;
       }
     }
     client.stop();
