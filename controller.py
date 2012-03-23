@@ -1,7 +1,7 @@
 '''Control for the taillight with LEDs in it
 
 Usage:
-  from farsounder import taillight
+  import led_taillight.controller as taillight
   taillight.set_leds(taillight.FAST_FLASH)
 '''
 import socket
