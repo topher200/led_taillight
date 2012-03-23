@@ -11,7 +11,7 @@ TAILLIGHT_PORT = 50001
 
 # LED numbers and Modes for parameters:
 LEDS = [0, 1, 2, 3]
-OFF, ON, SLOW_FLASH, NORMAL_FLASH, FAST_FLASH, PULSE = range(7)
+OFF, ON, SLOW_FLASH, NORMAL_FLASH, FAST_FLASH, PULSE = range(6)
 
 
 def set_leds(mode):
