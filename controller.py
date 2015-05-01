@@ -25,5 +25,5 @@ def set_leds(mode):
 def _send_message(message):
   client_socket = socket.socket()
   client_socket.connect((TAILLIGHT_IP, TAILLIGHT_PORT))
-  client_socket.send(message)
+  client_socket.send(message.encode('utf-8'))
   client_socket.close()
